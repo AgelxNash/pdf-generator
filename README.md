@@ -1,8 +1,7 @@
 # PDF Generator
-![CI](https://github.com/AgelxNash/pdf-generator/actions/workflows/docker-publish.yml/badge.svg)
-![Docker Publish](https://github.com/AgelxNash/pdf-generator/actions/workflows/docker-publish.yml/badge.svg)
 ![Ruff](https://github.com/AgelxNash/pdf-generator/actions/workflows/ruff.yml/badge.svg)
 ![Mypy](https://github.com/AgelxNash/pdf-generator/actions/workflows/mypy.yml/badge.svg)
+![Docker Publish](https://github.com/AgelxNash/pdf-generator/actions/workflows/docker-build.yml/badge.svg)
 [![Docker Pulls](https://img.shields.io/docker/pulls/agelnash/pdf-generator.svg)](https://hub.docker.com/r/agelnash/pdf-generator)
 
 
