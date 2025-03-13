@@ -21,7 +21,7 @@ docker run -p 8000:8000 agelnash/pdf-generator:latest
 ## Установка и запуск
 ```bash
 pip install -r app/requirements.txt
-uvicorn app.index:app --reload
+uvicorn --app-dir app index:app --reload
 ```
 
 ## Пример Payload

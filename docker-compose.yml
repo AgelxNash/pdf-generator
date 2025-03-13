@@ -8,6 +8,8 @@ services:
       dockerfile: dockerfiles/api/Dockerfile
     ports:
       - "${PORT_API:-8000}:8000"
+    environment:
+      - PORT_API=${PORT_API:-8000}
     volumes:
       - ./app:/app
       - ./resources:/resources
