@@ -1,0 +1,11 @@
+fastapi~=0.113.0
+uvicorn[standard]~=0.30.6
+pydantic~=2.8.2
+pdf2image~=1.17.0
+pillow~=11.0.0
+PyPDF2~=3.01
+numpy~=1.26.4
+ruff~=0.9.10
+mypy~=1.15.0
+types-PyYAML~=6.0.12.20241230
+

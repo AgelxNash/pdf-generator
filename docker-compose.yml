@@ -1,0 +1,15 @@
+version: '3.8'
+name: ${PROJECT_NAME}
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: dockerfiles/api/Dockerfile
+    ports:
+      - "${PORT_API:-8000}:8000"
+    volumes:
+      - ./app:/app
+      - ./resources:/resources
+      - ./data/tmp:/data/tmp
+      - ./data/storage:/data/storage

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форма по КНД 1151158</title>
+    <link href="https://cdn.jsdelivr.net/npm/foundation-sites@6.6.3/dist/css/foundation.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="grid-container mt-5">
+    <h2 class="text-center">
+        Генерация справки по форме <a href="https://www.nalog.gov.ru/html/sites/www.new.nalog.ru/2023/about_fts/docs_fts/pril1_14112652.pdf">КНД 1151158</a>
+        об оплате образовательных услуг для представления в налоговый орган
+    </h2>
+    <form id="data-form"></form>
+    <blockquote id="response-message" style="display:none;">
+        <pre id="response-content"></pre>
+    </blockquote>
+</div>
+
+<script>
+    // JSON с данными
+    const jsonData = {
+        "first_page": {
+            "org_inn": "1234567890",
+            "org_kpp": "987654321",
+            "spravka_number": "13776 120325",
+            "korr_number": "001",
+            "otchet_period": "2024",
+            "org_desc_first": "ООО Ромашка",
+            "org_desc_second": "ИНН 1234567890, КПП 987654321",
+            "org_desc_third": "Россия, Москва, ул. Примерная, д. 1",
+            "org_desc_four": "Тел.: +7 (495) 123-45-67",
+            "study_form": "Очная",
+            "taxpayer_lastname": "Иванов",
+            "taxpayer_firstname": "Иван",
+            "taxpayer_surname": "Иванович",
+            "taxpayer_inn": "123456789012",
+            "taxpayer_date_birth": "01",
+            "taxpayer_month_birth": "01",
+            "taxpayer_year_birth": "1990",
+            "taxpayer_document_code": "21",
+            "taxpayer_document_serial_number": "1234 567890",
+            "taxpayer_document_date_issue": "15",
+            "taxpayer_document_month_issue": "03",
+            "taxpayer_document_year_issue": "2010",
+            "taxpayer_is_student": "1",
+            "summa_rashodov_before_dot": "15000",
+            "summa_rashodov_after_dot": "00",
+            "authenticity_first": "Достоверность подтверждаю",
+            "authenticity_second": "Подпись налогоплательщика",
+            "authenticity_third": "Дата подачи справки",
+            "signature_date": "10",
+            "signature_month": "03",
+            "signature_year": "2025",
+            "pages_count": "2"
+        },
+        "second_page": {
+            "org_inn": "1234567890",
+            "org_kpp": "987654321",
+            "student_lastname": "Петров",
+            "student_firstname": "Петр",
+            "student_surname": "Петрович",
+            "student_inn": "123456789012",
+            "student_date_birth": "01",
+            "student_month_birth": "01",
+            "student_year_birth": "2000",
+            "student_document_code": "21",
+            "student_document_serial_number": "1234 567890",
+            "student_document_date_issue": "15",
+            "student_document_month_issue": "03",
+            "student_document_year_issue": "2020"
+        }
+    };
+
+    function generateFormFields(data, pagePrefix) {
+        const form = document.getElementById('data-form');
+        for (let field in data) {
+            const fieldValue = data[field];
+            const div = document.createElement('div');
+            div.classList.add('grid-x', 'grid-padding-x');
+
+            const labelDiv = document.createElement('div');
+            labelDiv.classList.add('cell', 'small-12', 'medium-4');
+
+            const label = document.createElement('label');
+            label.setAttribute('for', field);
+            label.textContent = field;
+
+            const inputDiv = document.createElement('div');
+            inputDiv.classList.add('cell', 'small-12', 'medium-8');
+
+            const input = document.createElement('input');
+            input.setAttribute('type', 'text');
+            input.classList.add('input-group-field');
+            input.setAttribute('id', field);
+            input.setAttribute('name', `${pagePrefix}[${field}]`);
+            input.setAttribute('placeholder', fieldValue);
+            input.value = fieldValue;
+
+            inputDiv.appendChild(input);
+            labelDiv.appendChild(label);
+            div.appendChild(labelDiv);
+            div.appendChild(inputDiv);
+            form.appendChild(div);
+        }
+    }
+
+    window.onload = function () {
+        generateFormFields(jsonData.first_page, 'first_page');
+
+        const hr = document.createElement('hr');
+        document.getElementById('data-form').appendChild(hr);
+
+        generateFormFields(jsonData.second_page, 'second_page');
+
+        const submitButton = document.createElement('button');
+        submitButton.classList.add('button', 'primary');
+        submitButton.textContent = 'Отправить';
+        submitButton.setAttribute('type', 'submit');
+        document.getElementById('data-form').appendChild(submitButton);
+    };
+
+    document.getElementById('data-form').addEventListener('submit', function (e) {
+        event.preventDefault();
+
+        const formData = new FormData(event.target);
+
+        const formObject = {};
+        formData.forEach((value, key) => {
+            const keys = key.split('[').map(k => k.replace(']', ''));
+            keys.reduce((acc, part, index) => {
+                if (index === keys.length - 1) {
+                    acc[part] = value;
+                } else {
+                    acc[part] = acc[part] || {};
+                }
+                return acc[part];
+            }, formObject);
+        });
+
+        fetch('/api/v1/knd1151158', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formObject)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text().then(errorText => {
+                        let error = new Error(`Ошибка ${response.status}`);
+                        error.response = errorText;
+                        throw error
+                    });
+                }
+                if (response.ok && response.headers.get('content-disposition')?.includes('attachment')) {
+                    return response.blob();
+                } else {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                if (data instanceof Blob) {
+                    const url = window.URL.createObjectURL(data);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'response.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } else {
+                    const formattedJson = JSON.stringify(data, null, 2);
+                    document.getElementById('response-message').style.display = 'block';
+                    document.getElementById('response-content').textContent = formattedJson;
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`Пришёл код ответа: ${error.message ? error.message : 'Ошибка связи'}`);
+                document.getElementById('response-message').style.display = 'block';
+                document.getElementById('response-content').textContent = error.response ? error.response : 'Ошибка!';
+            });
+    });
+</script>
+</body>
+</html>
