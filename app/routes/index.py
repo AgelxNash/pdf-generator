@@ -4,8 +4,9 @@ import os
 
 router = APIRouter()
 
+
 @router.get("/", response_class=HTMLResponse)
-def get_index():
+def get_index() -> HTMLResponse:
     base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # Папка app/
     index_path = os.path.join(base_dir, "templates", "index.html")
 

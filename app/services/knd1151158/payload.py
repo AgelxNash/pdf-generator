@@ -1,5 +1,5 @@
 from pydantic import BaseModel, model_validator
-from typing import Optional
+from typing import Optional, Self
 
 
 class FirstPage(BaseModel):
@@ -54,7 +54,7 @@ class SecondPage(BaseModel):
     student_document_year_issue: Optional[str] = None
 
     @model_validator(mode="after")
-    def check_all_or_none(cls, self):
+    def check_all_or_none(self: Self) -> Self:
         values = self.dict()
         filled = [v for v in values.values() if v not in (None, "")]
         if 0 < len(filled) < len(values):
