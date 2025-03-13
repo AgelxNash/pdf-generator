@@ -1,4 +1,4 @@
-name: Lint and Test
+name: Ruff
 
 on: [push, pull_request]
 
@@ -14,12 +14,7 @@ jobs:
           python-version: "3.11"
 
       - name: Make
-        run: |
-          pip install -r app/requirements.txt
-          pip install ruff mypy
+        run: pip install ruff mypy
 
       - name: Run Ruff
         run: ruff check app/
-
-      - name: Run Mypy
-        run: mypy app/

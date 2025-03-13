@@ -1,0 +1,22 @@
+name: Mypy
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Make
+        run: |
+          pip install -r app/requirements.txt
+          pip install mypy
+
+      - name: Run Mypy
+        run: mypy app/

@@ -1,10 +1,23 @@
 # PDF Generator
+![CI](https://github.com/AgelxNash/pdf-generator/actions/workflows/docker-publish.yml/badge.svg)
+![Docker Publish](https://github.com/AgelxNash/pdf-generator/actions/workflows/docker-publish.yml/badge.svg)
+![Ruff](https://github.com/AgelxNash/pdf-generator/actions/workflows/ruff.yml/badge.svg)
+![Mypy](https://github.com/AgelxNash/pdf-generator/actions/workflows/mypy.yml/badge.svg)
+[![Docker Pulls](https://img.shields.io/docker/pulls/agelnash/pdf-generator.svg)](https://hub.docker.com/r/agelnash/pdf-generator)
+
 
 ## Описание
 Генерация PDF из шаблона
 
 Не текущий момент доступна генерация справки по форме <a href="https://www.nalog.gov.ru/html/sites/www.new.nalog.ru/2023/about_fts/docs_fts/pril1_14112652.pdf">КНД 1151158</a>
 об оплате образовательных услуг для представления в налоговый орган.
+
+## Использование Docker
+
+```bash
+docker pull agelnash/pdf-generator:latest
+docker run -p 8000:8000 agelnash/pdf-generator:latest
+```
 
 ## Установка и запуск
 ```bash
